@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Billing System - Parth Daware_230</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+background:linear-gradient(120deg,#12092f,#0a0f20);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+
+}
+
+.container{
+
+width:1200px;
+display:flex;
+gap:50px;
+
+}
+
+.left{
+
+width:450px;
+background:#161721;
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,0,0,.4);
+
+}
+
+.left h1{
+
+margin-bottom:10px;
+
+}
+
+.left p{
+
+color:#9ca3af;
+margin-bottom:25px;
+
+}
+
+label{
+
+display:block;
+margin-top:15px;
+font-size:13px;
+letter-spacing:1px;
+color:#a5a8b3;
+
+}
+
+input{
+
+width:100%;
+padding:14px;
+margin-top:8px;
+border:none;
+outline:none;
+border-radius:10px;
+background:#222330;
+color:white;
+font-size:16px;
+
+}
+
+.row{
+
+display:flex;
+gap:15px;
+
+}
+
+button{
+
+margin-top:30px;
+width:100%;
+padding:15px;
+border:none;
+border-radius:10px;
+font-size:18px;
+background:#7c5cff;
+color:white;
+cursor:pointer;
+transition:.3s;
+
+}
+
+button:hover{
+
+background:#6246ea;
+
+}
+
+.right{
+
+display:flex;
+flex-direction:column;
+align-items:center;
+
+}
+
+.invoice{
+
+width:350px;
+background:white;
+color:black;
+padding:25px;
+border-radius:8px;
+font-family:Courier New;
+box-shadow:0 0 20px rgba(0,0,0,.4);
+
+}
+
+.invoice h2{
+
+text-align:center;
+margin-bottom:20px;
+letter-spacing:3px;
+
+}
+
+.invoice table{
+
+width:100%;
+font-size:15px;
+border-collapse:collapse;
+
+}
+
+.invoice td{
+
+padding:6px 0;
+
+}
+
+.total{
+
+font-size:30px;
+font-weight:bold;
+color:#0ca940;
+
+}
+
+hr{
+
+margin:12px 0;
+
+}
+
+.barcode{
+
+font-size:60px;
+letter-spacing:2px;
+text-align:center;
+
+}
+
+.btns{
+
+display:flex;
+gap:20px;
+margin-top:20px;
+
+}
+
+.btns button{
+
+width:170px;
+
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="left">
+
+<h1>Billing System</h1>
+<p>Enter quantity and pricing details below to generate an invoice.</p>
+
+<label>Customer Name</label>
+<input type="text" id="customer" placeholder="Customer Name">
+
+<label>Product Name</label>
+<input type="text" id="product" placeholder="Product">
+
+<div class="row">
+
+<div>
+
+<label>Quantity</label>
+<input type="number" id="qty" value="1">
+
+</div>
+
+<div>
+
+<label>Price Per Unit</label>
+<input type="number" id="price" value="1000">
+
+</div>
+
+</div>
+
+<label>GST Rate (%)</label>
+<input type="number" id="gst" value="18">
+
+<button onclick="generateInvoice()">Generate Invoice</button>
+
+</div>
+
+<div class="right">
+
+<div class="invoice" id="invoice">
+
+<h2>YOUR BILL</h2>
+
+<table>
+
+<tr>
+<td>Customer Name:</td>
+<td align="right" id="cname">-</td>
+</tr>
+
+<tr>
+<td>Product:</td>
+<td align="right" id="pname">-</td>
+</tr>
+
+<tr>
+<td>Quantity:</td>
+<td align="right" id="q">0</td>
+</tr>
+
+<tr>
+<td>Price / Unit:</td>
+<td align="right">₹<span id="ppu">0</span></td>
+</tr>
+
+</table>
+
+<hr>
+
+<table>
+
+<tr>
+<td>Total Amount:</td>
+<td align="right">₹<span id="total">0</span></td>
+</tr>
+
+<tr>
+<td>GST:</td>
+<td align="right">₹<span id="gstamt">0</span></td>
+</tr>
+
+</table>
+
+<hr>
+
+<table>
+
+<tr>
+<td><b>FINAL AMOUNT</b></td>
+<td align="right" class="total">
+₹<span id="final">0</span>
+</td>
+</tr>
+
+</table>
+
+<div class="barcode">
+||||||||||||||||||
+</div>
+
+<center>PAR-000017</center>
+
+<br><br>
+
+<i id="sign">Parth Daware</i>
+
+<br>
+
+<small>AUTHORIZED SIGNATORY</small>
+
+</div>
+
+<div class="btns">
+
+<button onclick="window.print()">Print Invoice</button>
+
+<button onclick="clearForm()">Clear Form</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function generateInvoice(){
+
+let customer=document.getElementById("customer").value;
+
+let product=document.getElementById("product").value;
+
+let qty=parseFloat(document.getElementById("qty").value);
+
+let price=parseFloat(document.getElementById("price").value);
+
+let gst=parseFloat(document.getElementById("gst").value);
+
+let total=qty*price;
+
+let gstAmount=(total*gst)/100;
+
+let finalAmount=total+gstAmount;
+
+document.getElementById("cname").innerHTML=customer;
+
+document.getElementById("pname").innerHTML=product;
+
+document.getElementById("q").innerHTML=qty;
+
+document.getElementById("ppu").innerHTML=price.toFixed(2);
+
+document.getElementById("total").innerHTML=total.toFixed(2);
+
+document.getElementById("gstamt").innerHTML=gstAmount.toFixed(2)+" ("+gst+"%)";
+
+document.getElementById("final").innerHTML=finalAmount.toFixed(2);
+
+}
+
+function clearForm(){
+
+document.getElementById("customer").value="";
+document.getElementById("product").value="";
+document.getElementById("qty").value=1;
+document.getElementById("price").value=1000;
+document.getElementById("gst").value=18;
+
+document.getElementById("cname").innerHTML="-";
+document.getElementById("pname").innerHTML="-";
+document.getElementById("q").innerHTML="0";
+document.getElementById("ppu").innerHTML="0";
+document.getElementById("total").innerHTML="0";
+document.getElementById("gstamt").innerHTML="0";
+document.getElementById("final").innerHTML="0";
+
+}
+
+generateInvoice();
+
+</script>
+
+</body>
+</html>
