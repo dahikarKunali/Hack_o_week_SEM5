@@ -1,0 +1,6 @@
+Model,Accuracy
+Bagging,0.865
+XGBoost,0.84
+LightGBM,0.835
+L1 Logistic Regression,0.795
+L2 Logistic Regression,0.8
